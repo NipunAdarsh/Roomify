@@ -145,7 +145,3 @@ No environment variables required for frontend development. For production build
 
 - Vite configuration for API proxying
 - Environment-specific URLs
-
-## License
-
-This project is for demonstration purposes.

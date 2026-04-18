@@ -79,8 +79,7 @@ export const Login: React.FC = () => {
                 </a>
               </div>
 
-              {/* Action Button */}
-              <Link to="/" className="w-full bg-primary hover:bg-primary-container text-on-primary font-headline py-4 rounded-full shadow-[0_10px_30px_-10px_rgba(0,54,8,0.5)] transition-all duration-500 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center space-x-2 group block mt-6 text-center">
+              <Link to="/dashboard" className="w-full bg-primary hover:bg-primary-container text-on-primary font-headline py-4 rounded-full shadow-[0_10px_30px_-10px_rgba(0,54,8,0.5)] transition-all duration-500 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center space-x-2 group block mt-6 text-center">
                 <span className="text-lg font-bold tracking-wide">Enter the Ecosystem</span>
                 <span className="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </Link>

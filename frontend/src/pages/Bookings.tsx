@@ -1,20 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { mockData } from '../data/mockData';
+import { CheckCircle2, Receipt, X } from 'lucide-react';
 
 export const Bookings: React.FC = () => {
-  const { bookings } = mockData;
+  const [bookings, setBookings] = useState(mockData.bookings);
+  const [activeInvoice, setActiveInvoice] = useState<typeof mockData.bookings[0] | null>(null);
+  const [invoiceComplete, setInvoiceComplete] = useState(false);
+
+  // Mock calculation logic like invoiceController.js
+  const handleCheckoutClick = (booking: typeof mockData.bookings[0]) => {
+      setActiveInvoice(booking);
+      setInvoiceComplete(false);
+  };
+
+  const processPayment = () => {
+      if(!activeInvoice) return;
+      
+      // Update local state to mimic backend 'Completed'
+      setBookings(prev => prev.map(b => 
+          b.id === activeInvoice.id ? { ...b, status: 'Completed' } : b
+      ));
+
+      setInvoiceComplete(true);
+      setTimeout(() => {
+          setActiveInvoice(null);
+          setInvoiceComplete(false);
+      }, 3000);
+  };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fade-in relative h-full">
+      
+      {/* Invoice Modal Overlay */}
+      {activeInvoice && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-tertiary/60 backdrop-blur-xl" onClick={() => !invoiceComplete && setActiveInvoice(null)}></div>
+              
+              <div className="relative bg-surface/90 backdrop-blur-3xl rounded-[32px] p-8 border border-white/20 shadow-2xl w-full max-w-md animate-fade-in-up flex flex-col">
+                  {!invoiceComplete ? (
+                      <>
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-headline-sm text-primary flex items-center gap-2">
+                                <Receipt className="w-6 h-6" />
+                                Invoice Summary
+                            </h3>
+                            <button onClick={() => setActiveInvoice(null)} className="p-2 bg-surface-variant/50 hover:bg-surface-variant rounded-full text-on-surface-variant transition-all">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4 mb-8 text-on-surface">
+                            <div className="flex justify-between border-b border-surface-variant/50 pb-2">
+                                <span className="text-on-surface-variant">Booking ID</span>
+                                <span className="font-bold">{activeInvoice.id}</span>
+                            </div>
+                            <div className="flex justify-between border-b border-surface-variant/50 pb-2">
+                                <span className="text-on-surface-variant">Guest Name</span>
+                                <span className="font-bold">{activeInvoice.guestName}</span>
+                            </div>
+                            <div className="flex justify-between border-b border-surface-variant/50 pb-2">
+                                <span className="text-on-surface-variant">Room Charges</span>
+                                <span className="font-bold text-secondary">${activeInvoice.amount.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between border-b border-surface-variant/50 pb-2">
+                                <span className="text-on-surface-variant">Restaurant Orders</span>
+                                <span className="font-bold text-secondary">$350.00</span>
+                            </div>
+                            <div className="flex justify-between border-b border-secondary/20 pb-2 pt-4">
+                                <span className="font-bold text-primary">Grand Total</span>
+                                <span className="text-xl font-black text-secondary">${(activeInvoice.amount + 350).toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <button onClick={processPayment} className="w-full py-4 bg-primary text-on-primary rounded-full hover:bg-primary-container font-bold shadow-lg shadow-primary/20 transition-all">
+                            Process Checkout
+                        </button>
+                      </>
+                  ) : (
+                      <div className="flex flex-col items-center justify-center py-6 text-center">
+                          <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mb-6 shadow-xl shadow-secondary/30">
+                              <CheckCircle2 className="w-10 h-10 text-on-secondary" />
+                          </div>
+                          <h2 className="text-headline-sm text-on-surface mb-2">Checkout Complete</h2>
+                          <p className="text-body-lg text-on-surface-variant">Invoice generated. Room marked for Maintenance.</p>
+                      </div>
+                  )}
+              </div>
+          </div>
+      )}
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-3xl font-extrabold text-primary font-headline leading-tight">Master Directory</h2>
           <p className="text-primary/60 font-medium">Manage and review all active reservations.</p>
         </div>
-        <button className="bg-primary text-white py-3 px-6 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95 shadow-lg shadow-primary/20">
-          <span className="material-symbols-outlined">add</span>
-          New Booking
-        </button>
       </div>
 
       {/* Filter Bar */}
@@ -54,9 +133,8 @@ export const Bookings: React.FC = () => {
                 <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest">Guest</th>
                 <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest">Room</th>
                 <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest">Dates</th>
-                <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest">Status</th>
                 <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest text-right">Amount</th>
-                <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest text-right"></th>
+                <th className="py-4 px-6 text-sm font-bold text-primary/60 uppercase tracking-widest">Status / Action</th>
               </tr>
             </thead>
             <tbody>
@@ -71,18 +149,23 @@ export const Bookings: React.FC = () => {
                   </td>
                   <td className="py-4 px-6 font-bold text-primary">{booking.roomName}</td>
                   <td className="py-4 px-6 text-primary/70">{booking.checkIn} - {booking.checkOut}</td>
-                  <td className="py-4 px-6">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      booking.status === 'Confirmed' ? 'bg-secondary-container text-on-secondary-container' : 'bg-white text-primary border border-primary/20'
+                  <td className="py-4 px-6 font-black text-secondary text-right">${booking.amount.toLocaleString()}</td>
+                  <td className="py-4 px-6 flex items-center gap-3">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
+                      booking.status === 'Confirmed' ? 'bg-secondary-container text-on-secondary-container' 
+                      : booking.status === 'Completed' ? 'bg-surface-variant text-on-surface-variant border border-outline-variant/30'
+                      : 'bg-white text-primary border border-primary/20'
                     }`}>
                       {booking.status}
                     </span>
-                  </td>
-                  <td className="py-4 px-6 font-black text-secondary text-right">${booking.amount.toLocaleString()}</td>
-                  <td className="py-4 px-6 text-right">
-                    <button className="p-2 rounded-full hover:bg-black/5 text-primary transition-all">
-                      <span className="material-symbols-outlined">more_horiz</span>
-                    </button>
+                    {booking.status === 'Confirmed' && (
+                        <button 
+                         onClick={() => handleCheckoutClick(booking)}
+                         className="px-4 py-1.5 bg-primary text-on-primary rounded-full text-xs font-bold hover:bg-primary-container transition-all shadow-sm"
+                        >
+                            Checkout (Invoice)
+                        </button>
+                    )}
                   </td>
                 </tr>
               ))}

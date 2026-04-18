@@ -98,7 +98,7 @@ export const SignUp: React.FC = () => {
             {/* Secondary Action */}
             <p className="text-center text-sm font-medium text-on-surface-variant">
               Already have an account? 
-              <Link to="/login" className="text-secondary font-bold hover:underline underline-offset-4 ml-1">
+              <Link to="/" className="text-secondary font-bold hover:underline underline-offset-4 ml-1">
                 Log In
               </Link>
             </p>

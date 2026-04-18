@@ -119,6 +119,6 @@ Roomify goes beyond simple tables by utilizing the database engine to handle cor
 
 ## 7. Tech Stack Assumptions
 
-* **Database:** PostgreSQL or MySQL (Required to support Triggers, SPs, and advanced relational features).
+* **Database:** MySQL (Required to support Triggers, SPs, and advanced relational features).
 * **Backend:** Lightweight framework (e.g., Node.js with Express, or Python with FastAPI/Flask) acting as a secure API layer.
 * **Frontend:** HTML/CSS/Vanilla JS or a lightweight React/Vue setup to interface with the API.

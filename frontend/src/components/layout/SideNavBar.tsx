@@ -20,31 +20,39 @@ export const SideNavBar: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-col gap-2 flex-1">
-        <NavLink to="/" className={getNavLinkClass}>
+        <NavLink to="/dashboard" className={getNavLinkClass} end>
           <span className="material-symbols-outlined">dashboard</span>
           <span className="font-body">Overview</span>
         </NavLink>
-        <NavLink to="/guest" className={getNavLinkClass}>
+        <NavLink to="/dashboard/guest" className={getNavLinkClass}>
           <span className="material-symbols-outlined">group</span>
           <span className="font-body">Guests</span>
         </NavLink>
-        <NavLink to="/bookings" className={getNavLinkClass}>
+        <NavLink to="/dashboard/bookings" className={getNavLinkClass}>
           <span className="material-symbols-outlined">inventory_2</span>
           <span className="font-body">Bookings</span>
         </NavLink>
-        <NavLink to="/analytics" className={getNavLinkClass}>
+        <NavLink to="/dashboard/restaurant" className={getNavLinkClass}>
+          <span className="material-symbols-outlined">restaurant</span>
+          <span className="font-body">Restaurant</span>
+        </NavLink>
+        <NavLink to="/dashboard/halls" className={getNavLinkClass}>
+          <span className="material-symbols-outlined">celebration</span>
+          <span className="font-body">Party Halls</span>
+        </NavLink>
+        <NavLink to="/dashboard/analytics" className={getNavLinkClass}>
           <span className="material-symbols-outlined">monitoring</span>
           <span className="font-body">Analytics</span>
         </NavLink>
-        <NavLink to="/settings" className={getNavLinkClass}>
+        <NavLink to="/dashboard/settings" className={getNavLinkClass}>
           <span className="material-symbols-outlined">settings</span>
           <span className="font-body">Settings</span>
         </NavLink>
       </div>
-      <button className="mt-auto bg-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95 shadow-lg shadow-primary/20">
+      <NavLink to="/dashboard/new-booking" className="mt-auto bg-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95 shadow-lg shadow-primary/20">
         <span className="material-symbols-outlined">add_circle</span>
         New Booking
-      </button>
+      </NavLink>
     </nav>
   );
 };
